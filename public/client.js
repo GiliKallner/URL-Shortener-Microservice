@@ -7,17 +7,14 @@
 $(function() {
   console.log('hello world :o');
   
-  $.get('/dreams', function(dreams) {
-    dreams.forEach(function(dream) {
-      $('<li></li>').text(dream).appendTo('ul#dreams');
-    });
-  });
 
-  $('form').submit(function(event) {
+ $('form').submit(function(event) {
     event.preventDefault();
-    var dream = $('input').val();
-    $.post('/dreams?' + $.param({dream: dream}), function() {
-      $('<li></li>').text(dream).appendTo('ul#dreams');
+    var url = $('input').val();
+    $.post('/urlparser',{url: url}, function(url,status) {
+      if(status!=='success') console.error(status);
+      console.log(url.url);
+   //   $('<li></li>').text(url.data).appendTo('ul#dreams');
       $('input').val('');
       $('input').focus();
     });
