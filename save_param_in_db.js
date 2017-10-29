@@ -1,52 +1,68 @@
 
-
+const url_base = 'https://sapp.glitch.me';
 
 //returns param if param exists in database and false otherwise
-let find_param = (collection,param,db,next) => {
+let find_param = (collection,param,after_func) => {
   
   collection.find({
     url:param
   }).toArray((err,col) => {
-    db.close();   
-    if(col.length){return next(col);}     
+        console.log('col: ',col);
+
+    if(err) after_func(null,err); 
+    else after_func(col);
   });
- // console.log('found: ',found);
 }
 
-let set_shorten_url = (collection,db) => {
-  let existing_collection = collection.find().toArray((err,c)=>{
-    if(err) throw err;
-    db.close();
-    return c;
-  });
+//set shorten url - just indexes :)
+let set_shorten_url = (collection,next) => {
   
-  if(existing_collection) return Number(existing_collection[existing_collection.length-1].shorten_url)+1;
-  
-  else return 1;
-}
-
-let set_param = (collection,param,db,next) => {
-
-  find_param(collection,param,db,next);
-  /*console.log('found_param: ',found);
-  if(found){
-    db.close();
-    //return found;
+  let set_url = (c) =>{
+     
+    if(!c||!c.length){ return url_base+'/'+1;}
+     
+     let id = c[c.length-1].shorten_url;
+     let new_id = Number(id.split('/')[id.length-1])+1;
+     return url_base+'/'+new_id;
   }
   
-  else{*/
+  return collection.find().toArray((err,c)=>{
+    console.log('c : ',c);
+    if(err) return next(null,err);
+    console.log('url: ',set_url(c));
+    return set_url(c);
+  });
+    
+}
+
+//if its not allready there - than save it
+let save_param = (collection,param,next) =>{
+
      let new_param = {
        url:param,
-     //  shorten_url:set_shorten_url(collection,db)
+       shorten_url:set_shorten_url(collection,next)
      }
 
      collection.insert(new_param,(err,data) =>{
-      if(err) throw err;
+       if(err) return next(null,err);
        return next(new_param);
-       db.close();
    })
+
+}
+
+//set every action one after the other to make sense
+let set_param = (collection,param,next) => {
+  
+  let after_func = (file,err) =>{
+    if(err) return next(null,err);
+        
+    if(file.length) return file.shorten_url;//if its there reutrn the shorten url
+    return save_param(collection,param,next); //else save the file
+  }
+  //first find if the file is there
+  find_param(collection,param,after_func);
+  
  }
   
   
-//}
 module.exports = set_param;

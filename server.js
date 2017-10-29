@@ -9,10 +9,10 @@ const mongo_url = process.env.MONGOLAB_URI;
 const bodyParser = require('body-parser');
 const save_param_in_db = require('./save_param_in_db.js');
 
-/*make sure the input is a valid url*/
+//make sure the input is a valid url
 const validate_url = url => {
-  /*the regex code is taken from https://gist.github.com/dperini/729294 with a very small adjasment-? to accept urls
-  without http prefix*/
+  //the regex code is taken from https://gist.github.com/dperini/729294 with a very small adjasment-? to accept urls
+  //without http prefix
   let regex = /^(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
   return regex.test(url);
 }
@@ -37,11 +37,13 @@ app.post("/urlparser",  (req, res) =>{
   if (err) console.error('Unable to connect to the mongoDB server. Error:', err);
     
     let urls = db.collection('urls');
-  //  urls.remove({});
-    let next = (p) => {
-      console.log(p);
+    urls.remove({});
+    let next = (p,err) => {
+      if(err) throw err;
+      console.log('p: ',p);
+      db.close();
     }
-    save_param_in_db(urls,url,db,next);
+    save_param_in_db(urls,url,next);
   //  db.close();  
   });
   
