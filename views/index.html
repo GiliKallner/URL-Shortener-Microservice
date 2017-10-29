@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>URL Shortener</title>
+    <meta name="description" content="An app for shortening given urls">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- materialize -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="/style.css">
+
+  </head>
+  <body class="center-align container">
+    <header>
+      <h1>
+        URL Shortener Microservice
+      </h1>
+    </header>
+
+    <main class="flow-text">
+      <p>Enter a url to get the shortened one:</p>
+      <form>
+        <input type="text" maxlength="100" placeholder="Your url...">
+        <button type="submit">Submit</button>
+      </form>
+      <section class="shortenedUrl">
+        <p>
+        </p>
+      </section>
+    </main>
+
+    <footer>
+Another simple app made by RaphaelS
+    </footer>
+
+    <!-- Your web-app is https, so your scripts need to be too -->
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+            crossorigin="anonymous"></script>
+    <script src="/client.js"></script>
+    <!-- materialize -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+  </body>
+</html>
