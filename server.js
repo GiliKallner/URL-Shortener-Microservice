@@ -7,7 +7,7 @@ const mongo = mongodb.MongoClient;
 
 const mongo_url = process.env.MONGOLAB_URI; 
 const bodyParser = require('body-parser');
-const p = require('./url_parser_module.js');
+const save_param_in_db = require('./save_param_in_db.js');
 
 /*make sure the input is a valid url*/
 const validate_url = url => {
@@ -37,8 +37,12 @@ app.post("/urlparser",  (req, res) =>{
   if (err) console.error('Unable to connect to the mongoDB server. Error:', err);
     
     let urls = db.collection('urls');
-    p(urls,url,db);
-    db.close();  
+  //  urls.remove({});
+    let next = (p) => {
+      console.log(p);
+    }
+    save_param_in_db(urls,url,db,next);
+  //  db.close();  
   });
   
   
