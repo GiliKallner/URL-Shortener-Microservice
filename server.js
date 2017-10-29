@@ -1,34 +1,43 @@
-// server.js
-// where your node app starts
 
-// init project
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 
-var mongodb = require('mongodb');
-var mongo = mongodb.MongoClient;
+const mongodb = require('mongodb');
+const mongo = mongodb.MongoClient;
 
-var url = process.env.MONGOLAB_URI; 
-var bodyParser = require('body-parser');
+const mongo_url = process.env.MONGOLAB_URI; 
+const bodyParser = require('body-parser');
+const p = require('./url_parser_module.js');
+
+/*make sure the input is a valid url*/
+const validate_url = url => {
+  /*the regex code is taken from https://gist.github.com/dperini/729294 with a very small adjasment-? to accept urls
+  without http prefix*/
+  let regex = /^(?:(?:https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+  return regex.test(url);
+}
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-
-
-app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+app.get("/", (req, res)=> {
+  res.sendFile(__dirname + '/views/index.html');
 });
 
+
 app.post("/urlparser",  (req, res) =>{
+
+  let url = req.body.url;
+  if(!validate_url(url)){ 
+    res.status(200);
+    return res.send('The string you entered is not a valid url. Please try again.');
+  }
   
-  mongo.connect(url, function (err, db) {
+  mongo.connect(mongo_url, (err, db) =>{
   if (err) console.error('Unable to connect to the mongoDB server. Error:', err);
-    db.collection('urls').insertOne({
-      
-    });
     
-    console.log('database conected', url);    
+    let urls = db.collection('urls');
+    p(urls,url,db);
     db.close();  
   });
   

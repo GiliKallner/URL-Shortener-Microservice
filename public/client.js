@@ -11,10 +11,10 @@ $(function() {
  $('form').submit(function(event) {
     event.preventDefault();
     var url = $('input').val();
-    $.post('/urlparser',{url: url}, function(url,status) {
+    $.post('/urlparser',{url:url}, function(return_value,status) {
       if(status!=='success') console.error(status);
-      console.log(url.url);
-   //   $('<li></li>').text(url.data).appendTo('ul#dreams');
+      console.log(return_value);
+      //   $('<li></li>').text(url.data).appendTo('ul#dreams');
       $('input').val('');
       $('input').focus();
     });
