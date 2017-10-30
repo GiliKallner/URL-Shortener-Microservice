@@ -1,12 +1,14 @@
 
+import copy from 'copy-to-clipboard';
 
 $(function() {  
  
  $('input').on('input',()=>{$('.shortenedUrl').css('visibility','hidden');}) 
  $('button.copy').click((event)=>{
-   let url = $('section>pre').text().select()
-   console.log(url);
-   document.execCommand('copy', false,url);
+   let url = $('section>pre').text();
+   //console.log(url);
+   copy(url);
+  // document.execCommand('copy', false,url);
  });
   
  $('form').submit(function(event) {
