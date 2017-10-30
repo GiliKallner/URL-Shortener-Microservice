@@ -62,16 +62,18 @@ mongo.connect(mongo_url, (err, db) =>{
     
     urls.find({shorten_url:Number(req.params.adr)})
         .toArray((err,col) => {
-          if(err) {
-              console.log('error: ',err);
-              throw err;
-          }
-          if(!col.length){
-               res.send('the url you requested does not exist in our database. Please create one and try again.');
-               res.status(200);
-          }
+          if(err) throw err;
           
-          res.redirect(col.url);
+          else if(!col.length){
+               res.send('the url you requested does not exist in our database. You can create one at: https://sapp.glitch.me/ and try again.');
+               res.status(200);
+               } 
+      
+          else{
+            console.log('col: ',col);
+              console.log("redirecting to the url in the database");
+              res.redirect(col[0].url);
+              }
     });
   
 });

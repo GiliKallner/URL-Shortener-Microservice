@@ -6,3 +6,6 @@
 .shortenedUrl{
   visibility:hidden;
 }
+input{
+  letter-spacing: 0.3em;
+}
