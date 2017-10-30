@@ -6,7 +6,6 @@
 //-save it
 const find_param = require('./find_file_in_db.js');
 
-const url_base = 'https://sapp.glitch.me';//our app- the shorten url will be added to it.
 
 //if its not allready there - than save it
 let save_param = (collection,param,url_set,next) =>{
@@ -27,11 +26,11 @@ let save_param = (collection,param,url_set,next) =>{
 let set_shorten_url = (collection,param,save_param,next) => {
 
   let set_url = (c) =>{
-    if(!c||!c.length){return url_base+'/'+1;}
+    if(!c||!c.length){return 1;}
     
-     let id = c[c.length-1].shorten_url.split('/');
-     let new_id = Number(id[id.length-1])+1;
-      return url_base+'/'+new_id;
+      return Number(c[c.length-1].shorten_url)+1;
+    // let new_id = Number(id[id.length-1])+1;
+      //return id;//url_base+'/'+new_id;
   }
   
   collection.find().toArray((err,c)=>{
@@ -40,8 +39,6 @@ let set_shorten_url = (collection,param,save_param,next) => {
   });
     
 }
-
-
 
 //set every action one after the other to make sense
 let set_params = (collection,param,next) => {

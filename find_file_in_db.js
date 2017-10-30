@@ -1,9 +1,9 @@
-///find if file exists in database
-module.exports =
-(collection,param,callback) => {
+//find and returns url in database
+
+module.exports = (collection,url,callback) => {
   
   collection.find({
-    url:param
+    url:url
   }).toArray((err,col) => {
 
     if(err) callback(null,err); 

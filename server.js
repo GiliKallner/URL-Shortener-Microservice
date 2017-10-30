@@ -9,7 +9,7 @@ const mongo_url = process.env.MONGOLAB_URI;
 const bodyParser = require('body-parser');
 const shorten_url = require('./shorten_url.js');
 
-let urls_array = [];
+const url_base = 'https://sapp.glitch.me';//our app- the shorten url will be added to it.
 
 //make sure the input is a valid url
 const validate_url = url => {
@@ -25,32 +25,36 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.get("/", (req, res)=> {
   res.sendFile(__dirname + '/views/index.html');
 });
-
-app.get("/urlparser",  (req, res) =>{
-  res.send(urls_array);
-  console.log(urls_array);
-});
-
   
-  mongo.connect(mongo_url, (err, db) =>{
+//connect to database
+mongo.connect(mongo_url, (err, db) =>{
     if (err) console.error('Unable to connect to the mongoDB server. Error:', err);
     let urls = db.collection('urls');
-        
-    app.post("/urlparser",  (req, res) =>{
+   // urls.remove({});
+  
+  //handle recieved input from client
+  app.post("/urlparser",  (req, res) =>{
+      
         let url = req.body.url;
         if(!validate_url(url)){ 
           res.status(200);
           return res.send('The string you entered is not a valid url. Please try again.');
         }
         let next = (p,err) => {
-        //  urls.remove({});
           db.close();
           if(err) throw err;
+
           res.status(200);    
-          res.send(p.shorten_url);
+          res.send(url_base+'/'+p.shorten_url);
         }         
         shorten_url(urls,url,next);    
      });
+  
+  //redirect to right url
+  app.get("/:url_r",(req,res) => {
+    let url_r = req.params;
+    console.log(url_r);  
+  });
     
     
   
