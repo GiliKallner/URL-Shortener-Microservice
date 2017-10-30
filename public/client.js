@@ -1,5 +1,5 @@
 
-import copy from 'copy-to-clipboard';
+let copy = require('copy-to-clipboard');
 
 $(function() {  
  
