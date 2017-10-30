@@ -3,3 +3,6 @@
   box-sizing: border-box;
 }
 
+.shortenedUrl{
+  visibility:hidden;
+}

@@ -9,6 +9,8 @@ const mongo_url = process.env.MONGOLAB_URI;
 const bodyParser = require('body-parser');
 const shorten_url = require('./shorten_url.js');
 
+let urls_array = [];
+
 //make sure the input is a valid url
 const validate_url = url => {
   //the regex code is taken from https://gist.github.com/dperini/729294 with a very small adjasment-? to accept urls
@@ -24,35 +26,40 @@ app.get("/", (req, res)=> {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/urlparser",  (req, res) =>{
+  res.send(urls_array);
+  console.log(urls_array);
+});
 
-app.post("/urlparser",  (req, res) =>{
-
-  let url = req.body.url;
-  if(!validate_url(url)){ 
-    res.status(200);
-    return res.send('The string you entered is not a valid url. Please try again.');
-  }
   
   mongo.connect(mongo_url, (err, db) =>{
-  if (err) console.error('Unable to connect to the mongoDB server. Error:', err);
-    
+    if (err) console.error('Unable to connect to the mongoDB server. Error:', err);
     let urls = db.collection('urls');
-    //urls.remove({});
-    let next = (p,err) => {
-      if(err) throw err;
-      console.log('p: ',p);
-      db.close();
-    }
-    shorten_url(urls,url,next);
-  });
-  
-  
-  res.status(200);
-  res.send(req.body);
+        
+    app.post("/urlparser",  (req, res) =>{
+        let url = req.body.url;
+        if(!validate_url(url)){ 
+          res.status(200);
+          return res.send('The string you entered is not a valid url. Please try again.');
+        }
+        let next = (p,err) => {
+        //  urls.remove({});
+          db.close();
+          if(err) throw err;
+          res.status(200);    
+          res.send(p.shorten_url);
+        }         
+        shorten_url(urls,url,next);    
+     });
+    
+    
   
 });
+
+
+
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
-});
+}); 
