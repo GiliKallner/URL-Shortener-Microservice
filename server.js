@@ -44,7 +44,10 @@ mongo.connect(mongo_url, (err, db) =>{
     
     let next = (p,err) => {
       db.close();
-      if(err) throw err;
+      if(err){
+        console.log("this is a next error");
+        throw err;
+      }
 
       res.status(200);    
       res.send(url_base+'/'+p.shorten_url);

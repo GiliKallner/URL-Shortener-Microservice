@@ -24,30 +24,21 @@ let save_param = (collection,param,url_set,next) =>{
 
 //set shorten url - just indexes :)
 let set_shorten_url = (collection,param,save_param,next) => {
-
-  let set_url = (c) =>{
-    if(!c||!c.length){return 1;}
-    console.log
-    return Number(c[c.length-1].shorten_url)+1;
-    // let new_id = Number(id[id.length-1])+1;
-      //return id;//url_base+'/'+new_id;
-  }
-  
+ 
   collection.find().toArray((err,c)=>{
     if(err) {  next(null,err);}
-    save_param(collection,param,set_url(c),next);
-  });
-    
+    let shorten = (!c || !c.length) ? 1 : Number(c[c.length-1].shorten_url)+1;
+    save_param(collection,param,shorten,next);
+  });    
 }
 
 let find_param = (collection,param,callback) => {
-//  console.log('callback: ',callback);
   
-  collection.find({
-    url:param
-  }).toArray((err,col) => {
+  collection.find({ url:param })
+   .toArray((err,col) => {
     console.log('col: ',col);
-    if(err) callback(null,err);
+    if(err){ console.log('i have an error: ',err);
+      callback(null,err);}
     callback(col);
   });
 }
@@ -58,6 +49,7 @@ let set_params = (collection,param,next) => {
  let callback = (file,err) =>{
     if(err) next(null,err);
     if(file && file.length) {
+      console.log('file: ',file);
       next(file[0]);//if its there reutrn the shorten url
     }
     else set_shorten_url(collection,param,save_param,next); //else create a shorten url
