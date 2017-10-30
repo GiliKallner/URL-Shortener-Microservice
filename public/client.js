@@ -4,8 +4,9 @@ $(function() {
  
  $('input').on('input',()=>{$('.shortenedUrl').css('visibility','hidden');}) 
  $('button.copy').click((event)=>{
-   let url = $('section>pre').text();
-   document.execCommand('copy', false, url||'');
+   let url = $('section>pre').text().select()
+   console.log(url);
+   document.execCommand('copy', false,url);
  });
   
  $('form').submit(function(event) {
