@@ -42,22 +42,44 @@ mongo.connect(mongo_url, (err, db) =>{
          return res.send('The string you entered is not a valid url. Please try again.');
       }
 
-    let next = (p,err) => {      
-      if(err){
-        console.log("this is a next error");
-        throw err;
-      }
+      let next = (p,err) => {      
+        if(err){
+          console.log("this is a next error");
+          throw err;
+        }
 
-      res.status(200);    
-      res.send(url_base+'/'+p.shorten_url);      
-     }              
-     shorten_url(urls,url,next);    
+        res.status(200);    
+        res.send(url_base+'/'+p.shorten_url);      
+       }              
+       shorten_url(urls,url,next); 
+    
   });
+  
+  
+  let find_param = (collection,file,callback) => {
+
+    collection.find({
+      shorten_url:file
+    }).toArray((err,col) => {
+      if(err) callback(null,err);
+      callback(col);
+    });
+  }
   
   //redirect to right url
   app.get("/:url_r",(req,res) => {
     let url_r = req.params;
-    console.log('url_r: ',url_r);  
+    let callback = (err,url_r){
+      if(err) throw err;
+      if(!url_r){
+        res.send('the url you requested does not exist in our database. Please create one and try again.');
+        res.status(200);
+      }
+      console.log(url_r); 
+    }
+    
+    find_param(urls,url_r,callback);
+    
   });
         
   
