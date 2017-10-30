@@ -58,21 +58,21 @@ mongo.connect(mongo_url, (err, db) =>{
   
     
   //redirect to right url
-  app.get("/:url_r",(req,res) => {
+  app.get("/:adr",(req,res) => {
     
-    urls.find({shorten_url:req.params})
+    urls.find({shorten_url:Number(req.params.adr)})
         .toArray((err,col) => {
           if(err) {
               console.log('error: ',err);
               throw err;
           }
-          if(!col){
-               console.log("no url")
-              //  res.send('the url you requested does not exist in our database. Please create one and try again.');
-              //  res.status(200);
+          if(!col.length){
+               res.send('the url you requested does not exist in our database. Please create one and try again.');
+               res.status(200);
           }
-        console.log(col); 
-        });
+          
+          res.redirect(col.url);
+    });
   
 });
 

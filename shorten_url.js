@@ -13,7 +13,6 @@ let save_param = (collection,param,url_set,next) =>{
        url:param,
        shorten_url:url_set
      }
-
      collection.insert(new_param,(err,data) =>{
        if(err) next(null,err);  
        next(new_param);
@@ -31,14 +30,14 @@ let set_shorten_url = (collection,param,save_param,next) => {
   });    
 }
 
+//find_param
 let find_param = (collection,file,callback) => {
   
-  collection.find({
-    url:file
-  }).toArray((err,col) => {
-    if(err) callback(null,err);
-    callback(col);
-  });
+    collection.find({ url:file })
+              .toArray((err,col) => {
+                  if(err) callback(null,err);
+                  callback(col);
+               });
 }
 
 //set every action one after the other to make sense
@@ -47,7 +46,6 @@ let set_params = (collection,param,next) => {
  let callback = (file,err) =>{
     if(err) next(null,err);
     if(file && file.length) {
-      console.log('file: ',file);
       next(file[0]);//if its there reutrn the shorten url
     }
     else set_shorten_url(collection,param,save_param,next); //else create a shorten url
