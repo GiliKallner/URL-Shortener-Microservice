@@ -4,7 +4,7 @@
 //-find if file exists
 //-set the shorten url
 //-save it
-//const find_param = require('./find_file_in_db.js');
+const find_param = require('./find_file_in_db.js');
 
 
 //if its not allready there - than save it
@@ -30,17 +30,6 @@ let set_shorten_url = (collection,param,save_param,next) => {
     let shorten = (!c || !c.length) ? 1 : Number(c[c.length-1].shorten_url)+1;
     save_param(collection,param,shorten,next);
   });    
-}
-
-let find_param = (collection,param,callback) => {
-  
-  collection.find({ url:param })
-   .toArray((err,col) => {
-    console.log('col: ',col);
-    if(err){ console.log('i have an error: ',err);
-      callback(null,err);}
-    callback(col);
-  });
 }
 
 //set every action one after the other to make sense

@@ -35,24 +35,22 @@ mongo.connect(mongo_url, (err, db) =>{
   //handle recieved input from client
   app.post("/urlparser",  (req, res) =>{
       
-        let url = req.body.url;
-        
-    if(!validate_url(url)){ 
-       res.status(200);
-       return res.send('The string you entered is not a valid url. Please try again.');
-    }
-    
-    let next = (p,err) => {
-      db.close();
+      let url = req.body.url;
+
+      if(!validate_url(url)){ 
+         res.status(200);
+         return res.send('The string you entered is not a valid url. Please try again.');
+      }
+
+    let next = (p,err) => {      
       if(err){
         console.log("this is a next error");
         throw err;
       }
 
       res.status(200);    
-      res.send(url_base+'/'+p.shorten_url);
-     }         
-     
+      res.send(url_base+'/'+p.shorten_url);      
+     }              
      shorten_url(urls,url,next);    
   });
   
@@ -61,8 +59,7 @@ mongo.connect(mongo_url, (err, db) =>{
     let url_r = req.params;
     console.log('url_r: ',url_r);  
   });
-    
-    
+        
   
 });
 

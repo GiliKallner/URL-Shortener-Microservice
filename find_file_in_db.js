@@ -1,10 +1,9 @@
 //find and returns url in database
 
-module.exports = (collection,url,callback) => {
-  console.log('callback: ',callback);
+module.exports = (collection,file,callback) => {
   
   collection.find({
-    url:url
+    url:file
   }).toArray((err,col) => {
     if(err) callback(null,err);
     callback(col);
