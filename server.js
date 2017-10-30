@@ -28,8 +28,8 @@ app.get("/", (req, res)=> {
   
 //connect to database
 mongo.connect(mongo_url, (err, db) =>{
-    if (err) console.error('Unable to connect to the mongoDB server. Error:', err);
-    let urls = db.collection('urls');
+  if (err) console.error('Unable to connect to the mongoDB server. Error:', err);
+  let urls = db.collection('urls');
    // urls.remove({});
   
   //handle recieved input from client
@@ -56,39 +56,28 @@ mongo.connect(mongo_url, (err, db) =>{
   });
   
   
-  let find_param = (collection,file,callback) => {
-
-    collection.find({
-      shorten_url:file
-    }).toArray((err,col) => {
-      if(err) callback(null,err);
-      callback(col);
-    });
-  }
-  
+    
   //redirect to right url
   app.get("/:url_r",(req,res) => {
-    let url_r = req.params;
-    let callback = (err,url_r){
-      if(err) throw err;
-      if(!url_r){
-        res.send('the url you requested does not exist in our database. Please create one and try again.');
-        res.status(200);
-      }
-      console.log(url_r); 
-    }
     
-    find_param(urls,url_r,callback);
-    
-  });
-        
+    urls.find({shorten_url:req.params})
+        .toArray((err,col) => {
+          if(err) {
+              console.log('error: ',err);
+              throw err;
+          }
+          if(!col){
+               console.log("no url")
+              //  res.send('the url you requested does not exist in our database. Please create one and try again.');
+              //  res.status(200);
+          }
+        console.log(col); 
+        });
   
 });
 
-
-
-
+});
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+const listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
-}); 
+});
