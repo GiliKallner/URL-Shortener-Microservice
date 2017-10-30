@@ -9,3 +9,10 @@
 input{
   letter-spacing: 0.1em;
 }
+
+.hidden_text{
+  height:0px !important;
+  border:none !important;
+  margin:0 !important;
+  padding:0 !important;
+}

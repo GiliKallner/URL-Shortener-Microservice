@@ -7,7 +7,8 @@ $(function() {
  $('button.copy').click((event)=>{
    
    let copy = $('section>pre').text();
-   $('.hide').v
+   $('.hidden_text').val(copy).select();
+   console.log($('.hidden_text').text())
    document.execCommand("Copy");
    //copy(url);
    
