@@ -1,6 +1,6 @@
 
 body{
-  overflow:hidden !importa
+  overflow:hidden !important;
 }
 .shortenedUrl{
   visibility:hidden;
@@ -19,4 +19,11 @@ form>input[type=text]:focus{
 .conatiner{
   padding: 0px !important;
   margin: 0px !important;
+}
+
+input[type=text].hidden_text{
+}
+
+footer{
+  padding:2em;
 }

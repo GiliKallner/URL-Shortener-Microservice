@@ -8,7 +8,9 @@ $(function() {
  $('button.copy').click((event)=>{   
    let copy = $('section>pre').text();
    $('.hidden_text').val(copy).select();
-   document.execCommand("Copy");   
+   document.execCommand("Copy");
+   
+
  });
   
  $('form').submit(function(event) {
@@ -19,7 +21,7 @@ $(function() {
       $('section>pre').text(shorten);
       $('.shortenedUrl').css('visibility','visible');
       $('input').val('');
-      $('input').focus();
+      //$('input').focus();
     });
   });
 
