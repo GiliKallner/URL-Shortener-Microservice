@@ -2,7 +2,7 @@
 
 $(function() {  
  
- $('input').on('blur',()=>{$('.shortenedUrl').css('visibility','hidden');}) 
+ $('input').on('input',()=>{$('.shortenedUrl').css('visibility','hidden');}) 
   
  $('form').submit(function(event) {
     event.preventDefault();
