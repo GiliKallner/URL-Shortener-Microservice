@@ -1,8 +1,8 @@
 
 * {
   box-sizing: border-box;
-  border:2px solid blue;
 }
+
 
 .shortenedUrl{
   visibility:hidden;
@@ -12,6 +12,5 @@ input{
 }
 
 input.hidden_text{
-  margin-left:-2000px; 
-  visibility:hidden;
+  margin-left:-9999px; 
 }

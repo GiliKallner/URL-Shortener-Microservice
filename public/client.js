@@ -4,14 +4,11 @@
 $(function() {  
  
  $('input').on('input',()=>{$('.shortenedUrl').css('visibility','hidden');}) 
- $('button.copy').click((event)=>{
-   
+ 
+ $('button.copy').click((event)=>{   
    let copy = $('section>pre').text();
    $('.hidden_text').val(copy).select();
-   console.log($('.hidden_text').text())
-   document.execCommand("Copy");
-   //copy(url);
-   
+   document.execCommand("Copy");   
  });
   
  $('form').submit(function(event) {
