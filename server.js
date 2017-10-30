@@ -36,19 +36,22 @@ mongo.connect(mongo_url, (err, db) =>{
   app.post("/urlparser",  (req, res) =>{
       
         let url = req.body.url;
-        if(!validate_url(url)){ 
-          res.status(200);
-          return res.send('The string you entered is not a valid url. Please try again.');
-        }
-        let next = (p,err) => {
-          db.close();
-          if(err) throw err;
+        
+    if(!validate_url(url)){ 
+       res.status(200);
+       return res.send('The string you entered is not a valid url. Please try again.');
+    }
+    
+    let next = (p,err) => {
+      db.close();
+      if(err) throw err;
 
-          res.status(200);    
-          res.send(url_base+'/'+p.shorten_url);
-        }         
-        shorten_url(urls,url,next);    
-     });
+      res.status(200);    
+      res.send(url_base+'/'+p.shorten_url);
+     }         
+     
+     shorten_url(urls,url,next);    
+  });
   
   //redirect to right url
   app.get("/:url_r",(req,res) => {
