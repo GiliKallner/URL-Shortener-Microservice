@@ -56,7 +56,7 @@ mongo.connect(mongo_url, (err, db) =>{
   //redirect to right url
   app.get("/:url_r",(req,res) => {
     let url_r = req.params;
-    console.log(url_r);  
+    console.log('url_r: ',url_r);  
   });
     
     

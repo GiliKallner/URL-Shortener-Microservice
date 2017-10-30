@@ -45,12 +45,12 @@ let set_params = (collection,param,next) => {
   
  let callback = (file,err) =>{
     if(err) next(null,err);
-        
     if(file && file.length) {
       next(file[0]);//if its there reutrn the shorten url
     }
     else set_shorten_url(collection,param,save_param,next); //else create a shorten url
   }
+ 
   //first find if the file is there
   find_param(collection,param,callback);
   
