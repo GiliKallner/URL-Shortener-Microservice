@@ -1,5 +1,5 @@
 URL Shortener Microservice 
 
-A VERY simple indeed app.
+A VERY simple app indeed.
 
 
